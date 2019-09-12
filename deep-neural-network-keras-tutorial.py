@@ -175,12 +175,12 @@ model.add(layer_maxpool2d)
 """
     Dropout applies dropout to the network
     Dropout is performed to drop neurons randomly while training based on a fraction rate to prevent overfitting
-    Droping neurons randomly reduces the co-dependence between neurons while training
+    Dropping neurons randomly reduces the co-dependence between neurons while training
     -- FOR MORE ABOUT DROPOUT -- http://www.jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf
     Dropout class takes the following arguments -- rate -- noise_shape -- shape
 """
 from keras.layers import Dropout
-layer_dropout = Dropout(rate = 0.3,
+layer_dropout = Dropout(rate = 0.3, # The probability of dropping inputs
                         noise_shape = None, # 
                         seed = 1 # to reproduce the same dropout pattern
                         )
