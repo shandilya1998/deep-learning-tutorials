@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Sep 10 15:33:44 2019
-
-@author: shandilya
+    Created on Tue Sep 10 15:33:44 2019
+    @author: shandilya
+    Refer to the following for more information about Convolutional Neural Networks
 """
 import os
 os.chdir('/kaggle/input')
@@ -137,9 +137,9 @@ from keras.layers import Conv1D
 #               bias_constraint=None)
 
 from keras.layers import Conv2D
-layer_conv2d = Conv2D(filters = 3,
-                      kernel_size = 10, # -- (2,8)
-                      strides = (2,3), # -- 2
+layer_conv2d = Conv2D(filters = 3, #  the dimensionality of the output space
+                      kernel_size = (3,3), # -- 3 - the dimenstions of the filters used for convolutions
+                      strides = 1, # -- (1,3)
                       padding = 'same', # -- 'valid' -- NOT VALID FOR -- strides = 1
                       activation = 'linear', # -- 'elu' -- 'selu' -- relu -- tanh -- sigmoid 
                                   # -- 'exponential' 
@@ -154,7 +154,37 @@ layer_conv2d = Conv2D(filters = 3,
 """
 model.add(layer_conv2d) 
 
-# For a multi-class classification problem
+"""
+    -- TO KNOW MORE ABOUT POOLING -- https://missinglink.ai/guides/tensorflow/tensorflow-maxpool-working-cnn-max-pooling-layers-tensorflow/
+    MaxPooling2D imports a layer for a 2D MaxPooling operation
+    MaxPooling2D class takes the following arguments -- pool_size -- strides -- padding
+    Input shape
+        - If data_format='channels_last': 4D tensor with shape: (batch_size, rows, cols, channels)
+        - If data_format='channels_first': 4D tensor with shape: (batch_size, channels, rows, cols)
+    Output shape
+        - If data_format='channels_last': 4D tensor with shape: (batch_size, pooled_rows, pooled_cols, channels)
+        - If data_format='channels_first': 4D tensor with shape: (batch_size, channels, pooled_rows, pooled_cols)
+"""
+from keras.layers import MaxPooling2D
+layer_maxpool2d = MaxPooling2D(pool_size = (2,2), #  -- 2 
+                               strides = (1,1), # -- 1 
+                               padding = 'same' # -- 'valid'
+                               )
+model.add(layer_maxpool2d)
+
+"""
+    Dropout applies dropout to the network
+    Dropout is performed to drop neurons randomly while training based on a fraction rate to prevent overfitting
+    Droping neurons randomly reduces the co-dependence between neurons while training
+    -- FOR MORE ABOUT DROPOUT -- http://www.jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf
+    Dropout class takes the following arguments -- rate -- noise_shape -- shape
+"""
+from keras.layers import Dropout
+layer_dropout = Dropout(rate = 0.3,
+                        noise_shape = None, # 
+                        seed = 1 # to reproduce the same dropout pattern
+                        )
+model.add(layer_dropout)
 
 """
     Dense module imports a dense connection of neurons with unit neurons
@@ -169,6 +199,7 @@ from keras.layers import Dense
 model.add(Dense(units = 32,
                 activation = 'linear')
          )
+    
 """
     Flatten() flattens the input. Does not affect the batch size.
     
@@ -276,7 +307,6 @@ def model_trainer(model):
         target_size=(256,256),
         batch_size=32,
         class_mode='categorical')# multiclass then  categorical
-    print(train_generator)
     hist = model.fit_generator(
         train_generator,
         steps_per_epoch=2000, # no of images in training set
@@ -295,7 +325,7 @@ print(hist)
 
 
     
-from keras.layers import MaxPooling2D
+
 
 from keras.layers import BatchNormalization
 from keras.layers import Dropout
