@@ -6,9 +6,11 @@
     Refer to the following for more information about Convolutional Neural Networks
 """
 import os
-os.chdir('/kaggle/input')
-print(os.listdir("/kaggle/input/kermany2018"))
-print(os.getcwd())
+import sys
+sys.path.append('/home/linuxbrew/.linuxbrew/lib/python3.7/site-packages')
+#os.chdir('/kaggle/input')
+#print(os.listdir("/kaggle/input/kermany2018"))
+#print(os.getcwd())
 """
     Google colab import to access data from disk on google colab
 """
@@ -321,6 +323,41 @@ hist,train_generator=model_trainer(model)
 
 print(hist)
 
+"""
+    Image visualization
+"""
+import matplotlib.pyplot as plt
+import nibabel as nib
+import copy
+file_path = '/home/shandilya/Shandilya/Padhai/ED6001/Template-T1-U8-RALPFH-BR.nii.gz'
+img = nib.load(file_path)
+
+"""
+    Generate patches of size p_size using stride p_size 
+    The arguments are the following -- vol -- IMAGE VOLUME LOADED FROM .nii.gz FILE -- p_size -- p_stride
+"""
+def generate_patches(vol, p_size, p_stride):
+    img_data = vol.get_fdata()
+    patch_list = []
+    start_l = 0
+    end_l = p_size[0]
+    start_h = 0
+    end_h = p_size[1]
+    while start_l<vol.shape[1]:
+        while start_h<vol.shape[2]:
+            temp = img_data[:,start_l: end_l,start_h:end_h]
+            patch_list.append(copy.deepcopy(temp))
+            start_h = end_h+1
+            end_h = end_h + p_stride[1]
+            plt.imshow(temp, cmap = 'gray')
+            plt.show()
+        start_l = end_l+1
+        end_l = start_l + p_stride[0]  
+        
+    return patch_list
+
+plt.imshow(im3, cmap = 'gray')
+plt.show()
 
 
 
